@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Jupiter</title>
+    <script>
+        var username = localStorage.getItem('username');
+        if (username) {
+            window.location.href='/abc'
+        }
+        window.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('welcome-form').addEventListener("submit", function(e) {
+                e.preventDefault();
+                var username = e.target[0].value;
+                if (!username) {
+                    document.getElementById("error").innerHTML = "Please input your username";
+                    return;
+                }
+                document.getElementById("error").innerHTML = "";
+                localStorage.setItem("username", username);
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="welcome-form">
+        <label>Username: </label>
+        <input name="username" type="'text" placeholder="Input your name" />
+        <button type="submit">Submit</button>
+        <p id="error"></p>
+    </form>
+</body>
+</html>
