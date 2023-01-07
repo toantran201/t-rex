@@ -64,7 +64,6 @@
       this.tRex = null;
       this.distanceMeter = null;
       this.distanceRan = 0;
-      this.highestScore = 0;
       this.time = 0;
       this.runningTime = 0;
       this.msPerFrame = 1000 / FPS;
@@ -498,11 +497,6 @@
         } else {
           this.gameOverPanel.draw();
         }
-        // Update the high score.
-        if (this.distanceRan > this.highestScore) {
-          this.highestScore = Math.ceil(this.distanceRan);
-          this.distanceMeter.setHighScore(this.highestScore);
-        }
         // Reset the time clock.
         this.time = getTimeStamp();
       },
@@ -532,7 +526,6 @@
           this.time = getTimeStamp();
           this.containerEl.classList.remove(Runner.classes.CRASHED);
           this.clearCanvas();
-          this.distanceMeter.reset(this.highestScore);
           this.horizon.reset();
           this.tRex.reset();
           this.playSound(this.soundFx.BUTTON_PRESS);
