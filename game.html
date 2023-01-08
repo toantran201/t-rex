@@ -4,12 +4,6 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script type="importmap">
-    {
-      "imports": {
-        "socket.io-client": "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
-      }
-    }
-
 
     </script>
     <script>
@@ -23,23 +17,35 @@
         IS_IOS = false,
         IS_MOBILE = false,
         IS_TOUCH_ENABLED = false;
-      let selectedIndex = 0
-      var randomRatios = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-      function setRandomArrListMap() {
-        const number = 12
-        randomRatios = randomRatios.map((item) => parseFloat(((item / number).toFixed(10))));
+      const randomRatios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.77];
+      var selectedRatio = randomRatios[0];
+      var randomNumber = () => {
+        const selectedIndex = randomRatios.indexOf(selectedRatio);
+        if (selectedIndex < randomRatios.length - 1) selectedRatio = randomRatios[selectedIndex + 1];
+        else selectedRatio = randomRatios[0];
+        return selectedRatio;
       }
 
-      setRandomArrListMap();
+      function showGameOverPopup(id) {
+      $('#gameover-popup').show();
+      $(id).show();
+    }
+    function hideGameOverPopup(id) {
+      $('#gameover-popup').hide();
+      $(id).hide();
+    }
 
-      function getRandomNumInArray() {
-        selectedIndex = selectedIndex + 1;
-        if (selectedIndex === 9) {
-          selectedIndex = 0
-        }
-        return randomRatios[selectedIndex]
-      }
+    function apiGameOver(point, thiz) {
+      console.log('game over', point);
+      showGameOverPopup('#over')
+      setTimeout(() => {
+        isWaitingResult = false;
+        // thiz.restart();
+        hideGameOverPopup('#over')
+      }, 3000)
+    }
+
+    var isWaitingResult = false;
 
       function Runner(outerContainerId) {
         Runner.instance_ = this;
@@ -478,18 +484,20 @@
           this.distanceMeter.acheivement = false;
           this.tRex.update(100, Trex.status.CRASHED);
           // Game over panel.
-          if (!this.gameOverPanel) {
-            this.gameOverPanel = new GameOverPanel(
-              this.canvas,
-              this.images.TEXT_SPRITE,
-              this.images.RESTART,
-              this.dimensions
-            );
-          } else {
-            this.gameOverPanel.draw();
-          }
+          // if (!this.gameOverPanel) {
+          //   this.gameOverPanel = new GameOverPanel(
+          //     this.canvas,
+          //     this.images.TEXT_SPRITE,
+          //     this.images.RESTART,
+          //     this.dimensions
+          //   );
+          // } else {
+          //   this.gameOverPanel.draw();
+          // }
           // Reset the time clock.
           this.time = getTimeStamp();
+          isWaitingResult  = true;
+          apiGameOver(Math.ceil(this.distanceRan), this);
         },
         stop: function () {
           this.activated = false;
@@ -507,7 +515,7 @@
           }
         },
         restart: function () {
-          if (!this.raqId) {
+          if (!this.raqId && !isWaitingResult) {
             this.playCount++;
             this.runningTime = 0;
             this.activated = true;
@@ -561,7 +569,7 @@
         }
         return false;
       };
-      var getRandomNum = (min, max) => Math.floor(getRandomNumInArray() * (max - min + 1)) + min;
+      var getRandomNum = (min, max) => Math.floor(randomNumber() * (max - min + 1)) + min;
       var vibrate = (duration) => navigator.vibrate(duration);
 
       function createCanvas(container, width, height, opt_classname) {
@@ -992,7 +1000,7 @@
           );
         },
         setBlinkDelay: function () {
-          this.blinkDelay = Math.ceil(Math.random() * Trex.BLINK_TIMING);
+          this.blinkDelay = Math.ceil(randomNumber() * Trex.BLINK_TIMING);
         },
         blink: function (time) {
           var deltaTime = time - this.animStartTime;
@@ -1308,7 +1316,7 @@
           this.yPos = HorizonLine.dimensions.YPOS;
         },
         getRandomType: function () {
-          return Math.random() > this.bumpThreshold ? this.dimensions.WIDTH : 0;
+          return randomNumber() > this.bumpThreshold ? this.dimensions.WIDTH : 0;
         },
         draw: function () {
           this.canvasCtx.drawImage(
@@ -1417,7 +1425,7 @@
             if (
               numClouds < this.config.MAX_CLOUDS &&
               this.dimensions.WIDTH - lastCloud.xPos > lastCloud.cloudGap &&
-              this.cloudFrequency > Math.random()
+              this.cloudFrequency > randomNumber()
             ) {
               this.addCloud();
             }
@@ -2104,6 +2112,33 @@
     <div class="onlyforchrome" style="font-size: 30px; text-align: center; font-family: Helvetica">
         Team Jupiter - Creative Force Viet Nam
     </div>
+    <div style="font-family: Helvetica;
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 1.5;
+      float: left;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-around;
+      width: 600px;
+      ">
+      <div id="user-score">
+        <h3>Gamer</h3>
+      </div>
+      <div id="user-other-score">
+        <h3>User</h3>
+      </div>
+    </div>
+    <div style="width: 200px;
+      position: absolute;
+      left: calc(50% - 100px);
+      top: 150px;
+      display: none;
+    " id="gameover-popup">
+      <div id="over" style="display: none">End game / set / match</div>
+      <div id="waiting" style="display: none">Chờ kết quả / Kết quả</div>
+      <div id="over" style="display: none">Chờ trận bắt đầu</div>
+    </div>
     <div id="main-frame-notchrome" style="display: none; margin-top: 50px">
         Sorry, this game only runs on the Google Chrome! You can download it free
         <a href="https://www.google.com/chrome">here</a>
@@ -2279,6 +2314,7 @@
       })
 
       function findMatch() {
+        console.log('connectionTest', connectionTest);
         if (connectionTest) {
           try {
             connectionTest.send('OnFindingMatchAsync', {
