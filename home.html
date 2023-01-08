@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+</head>
+<body>
+<h2 id="username"></h2>
+<button onclick="findAMatch(event)">
+    <i id="find-match-loading" class="fa fa-spinner fa-spin" style="display: none"></i> Find a match
+</button>
+<button>
+    Invite a friend
+</button>
+<script>
+  function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+
+  // username process
+  const username = getParameterByName('username')
+  const userNameTag = document.getElementById('username')
+  userNameTag.innerText = `Hi ${username}`
+
+  // find a match
+  const findAMatch = (event) => {
+    window.location.href = 'game.html'
+  }
+</script>
+</body>
+</html>

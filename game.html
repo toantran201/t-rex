@@ -9,23 +9,6 @@
       }
     }
   </script>
-    <script type="module">
-      import { io } from "socket.io-client";
-
-      const socket = io();
-      console.log(socket);
-      if (io) {
-        io.on("connection", (socket) => {
-          socket.on("disconnecting", () => {
-            console.log(socket.rooms); // the Set contains at least the socket ID
-          });
-
-          socket.on("disconnect", () => {
-            // socket.rooms.size === 0
-          });
-        });
-      }
-    </script>
     <script>
       function hideClass(name) {
         for (var elem of $(name)) elem.style.display = "none";

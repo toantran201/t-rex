@@ -1,5 +1,3 @@
-const BASE_URL = '/t-rex'
-
 // Router config
 const urlRoutes = {
   '/': {
@@ -12,6 +10,11 @@ const urlRoutes = {
     title: "Game",
     description: "Game",
   },
+  '/game': {
+    template: "/views/game.html",
+    title: "Game",
+    description: "Game",
+  }
 };
 
 //
@@ -24,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 const urlRoute = (event) => {
-  debugger
   event = event || window.event;
   event.preventDefault();
   window.history.pushState({}, "", event.target.href);
@@ -32,7 +34,6 @@ const urlRoute = (event) => {
 };
 
 const urlRouterHandler = async () => {
-  debugger
   let location = window.location.pathname;
   if (location.length === 0) {
     location = "/";

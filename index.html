@@ -10,9 +10,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<br>
 <div id="app">
-    <script src="/index.js"></script>
+<!--    <script src="/index.js"></script>-->
+    <h1>Welcome</h1>
+    <form onsubmit="welcomeSubmit(event)">
+        <label>
+            <input type="text" name="username" placeholder="Username" required/>
+        </label>
+        <button type="submit">
+            <i id="welcome-loading" class="fa fa-spinner fa-spin" style="display: none"></i> New game
+        </button>
+    </form>
 </div>
+<script>
+  const welcomeSubmit = (event) => {
+    event.preventDefault()
+    const username = event.target?.elements?.username?.value
+    localStorage.setItem('USER_NAME', username)
+    window.location.href = `home.html?username=${username}`
+  }
+</script>
 </body>
 </html>
