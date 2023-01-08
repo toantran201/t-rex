@@ -9,6 +9,7 @@
         "socket.io-client": "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
       }
     }
+
     </script>
     <script>
       function hideClass(name) {
@@ -2225,9 +2226,7 @@
         hideClass(".onlyforchrome");
       }
     </script>
-
     <script>
-      let connectionId = ''
       function getParameterByName(name, url = window.location.href) {
         name = name.replace(/[\[\]]/g, '\\$&');
         const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -2242,42 +2241,37 @@
       const userNameTag = document.getElementById('username')
       userNameTag.innerText = `Hi ${username}`
 
-      // find a match
-      function findMatch() {
-        const homeBlock = document.getElementById('home')
-        const gameBlock = document.getElementById('main-frame-error')
+      // Connection
+      var connection = 1;
+      var connectionId = 1;
+      const welcomeSubmit = (event) => {
+        event.preventDefault();
+        const username = event.target?.elements?.username?.value;
+        localStorage.setItem("USER_NAME", username);
+        window.location.href = `home.html?username=${username}&connection=${connection}&connectionId=${connectionId}`;
+      };
+      const connectionTest = new signalR.HubConnectionBuilder()
+        .withUrl("http://0.tcp.ap.ngrok.io:11362/game", {
+          withCredentials: false,
+        })
+        .build();
 
-        homeBlock.style.display = 'none'
-        gameBlock.style.visibility = 'visible'
-
-        var connection = 1;
-        var connectionId = 1;
-        const welcomeSubmit = (event) => {
-          event.preventDefault();
-          const username = event.target?.elements?.username?.value;
-          localStorage.setItem("USER_NAME", username);
-          window.location.href = `home.html?username=${username}&connection=${connection}&connectionId=${connectionId}`;
-        };
-        const connectionTest = new signalR.HubConnectionBuilder()
-          .withUrl("http://0.tcp.ap.ngrok.io:11362/game", {
-            withCredentials: false,
-          })
-          .build();
-        async function start() {
-          try {
-            await connectionTest.start();
-            console.log("SignalR Connected.");
-          } catch (err) {
-            console.log(err);
-            setTimeout(start, 5000);
-          }
+      async function start() {
+        try {
+          await connectionTest.start();
+          console.log("SignalR Connected.");
+        } catch (err) {
+          console.log(err);
+          setTimeout(start, 5000);
         }
-        connectionTest.onclose(async () => {
-          await start();
-        });
-        // Start the connection.
-        start();
       }
+
+      connectionTest.onclose(async () => {
+        await start();
+      });
+      // Start the connection.
+      start();
     </script>
+    <script src="game.js"></script>
 </div>
 </body>
