@@ -10,6 +10,7 @@
       }
     }
 
+
     </script>
     <script>
       function hideClass(name) {
@@ -2244,12 +2245,6 @@
       // Connection
       var connection = 1;
       var connectionId = 1;
-      const welcomeSubmit = (event) => {
-        event.preventDefault();
-        const username = event.target?.elements?.username?.value;
-        localStorage.setItem("USER_NAME", username);
-        window.location.href = `home.html?username=${username}&connection=${connection}&connectionId=${connectionId}`;
-      };
       const connectionTest = new signalR.HubConnectionBuilder()
         .withUrl("http://0.tcp.ap.ngrok.io:11362/game", {
           withCredentials: false,
@@ -2271,7 +2266,24 @@
       });
       // Start the connection.
       start();
+
+      connectionTest.on('OnReadyGameAsync', (a) => {
+        console.log('a')
+      })
+
+      function findMatch() {
+        if (connectionTest) {
+          try {
+            connectionTest.send('OnFindingMatchAsync', {
+              name: username
+            });
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          alert('No connection to server yet.');
+        }
+      }
     </script>
-    <script src="game.js"></script>
 </div>
 </body>
