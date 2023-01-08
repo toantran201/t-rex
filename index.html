@@ -6,28 +6,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <meta name="description" content="">
-
+    <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div id="app">
-    <h1>Welcome</h1>
+    <div class="background"></div>
+    <div id="voice-control" onclick="handleClickSound()">
+    </div>
+<!-- <div class="planet">
+    <img src="../images/planet1.png" height="50" width="50" />
+    <img src="../images/planet2.webp" height="50" width="50" />
+    <img src="../images/planet3.png" height="50" width="50" />
+    <img src="../images/planet4.png" height="50" width="50" />
+</div> -->
+<div class="welcome">
+    <h1 class="welcome-title">
+        <div>Dino</div>
+        <div>Jupiter</div>
+    </h1>
+    <!-- <img class="dino-img" src="https://art.pixilart.com/e00cff2d5f78554.png" alt="dinosaur" /> -->
     <form onsubmit="welcomeSubmit(event)">
-        <label>
-            <input type="text" name="username" placeholder="Username" required/>
-        </label>
-        <button type="submit">
+        <input type="text" name="username" placeholder="Username" required/>
+        <button type="submit" class="butn">
             <i id="welcome-loading" class="fa fa-spinner fa-spin" style="display: none"></i> New game
         </button>
     </form>
+    <audio loop="true" autoplay="true" id="sound">
+        <source src="../sounds/dino-sound.mp3" />
+    </audio>
+</div>
 </div>
 <script>
-  const welcomeSubmit = (event) => {
-    event.preventDefault()
-    const username = event.target?.elements?.username?.value
-    localStorage.setItem('USER_NAME', username)
-    window.location.href = `game.html?username=${username}`
-  }
+    var sound = false;
+    var volume = `<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABUUlEQVR4nO2WvStFYRzHP8hl8lImRTGQJBkMFtmlO0mZlCx2yj/AvaskJYNFJqvNYsM1y6hLKRmUt4Gjp77D06/r3NM9L1LnW2c4n9/vPJ+e8/I8B/Lk+ScZAcb+QvwAvAFDSQ66GaFnHwiAc6A5rrAJ2NaAfopAn2FdQFW9C3GkLcCBBvLFkzq/lczPimoXjUpbgWNP6osLwJXYobmuHXhUbSJMUADKejGCOoefAeAd+AJGTW1P/eth4lIEYS2xy474luHz4qdh4vsY4hnxiuHD4jdh4iCGuEf8yfBu8ee0xG3iH7/wz7Ru9aD4neG94m7sVF6uZfETw6fEr+t9TqWIM7crWkV8ydTWxN1nlegC4rIqVtUz9XOm2iIJL5kul2JuzbZb4zfwAnSQwiYxDszV6D9S7y4ZbovTmu0r0E+GKWu2G2ScTmA2iZ+APHloND81JqVVBcUqjAAAAABJRU5ErkJggg==">`
+    var mute = `<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAACA0lEQVR4nOWXz0sVURTHPyaaiyALeiCIUQuDHu0CoUXuBY1QBKOlLWzRTqh/IGwlFLUqKHLhtlWbILBNRLZI/IGCBKYYlCJaURgvDn4HboeZO/OKN5sOXGbu95x7P3PuHO6dgQMbAyqUbNeBGjBXNrwiaKPgnbE5GwVvAXaAj8CxsuEvNefTWNC/ws8C55x2GtjVnJcaBd8EvgHdTh/TfPNAU73w2wXADzXmFXAo0JuBVfn68iYJ4Vu6JmZPfVkVG1o7sK7YEee7If1FgQT+gNeCZe9Rfxk46saMyvfG6UeAPeAXcLxeeLLsh4G30p64+Dbgk3znne+59EHrtAJ3gI0gM2s/gIEI/BTwXRlUHeCBYm86fVz6fetMOGA98Hvq2xyhDUu3DEO7KH2GoBj+Bj6k+1kH6A5qIE1fIgeaB/+g6+eU6jZ9O0PfKgpO4FnVHvpQ8Zn+0+mtYXzeUoeNDPie2+G6pH9JGVPTDhctrhg4tr1ekPbOxVelLyTpTxTMnILwW+o/drFXpD8j5yydjoCvAf0Z8FndX3VjJqXbg0XNNvdHGeDXKpKTKXBrX9122gSsyNebB04G3E0Bn0k5aUL4miu4HunrSqiwFTkWYwU3Jc2254aZh/cC+3o19kVCWfB9Xe2VlWK+4KqUaCeA9wIvAh3/DbwSLLv9NpVqBrdPXX4DD10CElAhk8gAAAAASUVORK5CYII=">`
+    const welcomeSubmit = (event) => {
+        event.preventDefault()
+        const username = event.target?.elements?.username?.value
+        localStorage.setItem('USER_NAME', username)
+        window.location.href = `game.html?username=${username}`
+    }
+    document.getElementById('voice-control').insertAdjacentHTML('beforeend', mute);
+    const handleClickSound = () => {
+        document.getElementById('voice-control').innerHTML = "";
+        const audio = document.getElementById('sound');
+        if (sound) {
+            document.getElementById('voice-control').insertAdjacentHTML('beforeend', mute);
+            audio.pause();
+        } else {
+            document.getElementById('voice-control').insertAdjacentHTML('beforeend', volume);
+            audio.play();
+        }
+        sound = !sound;
+    }
 </script>
 </body>
 </html>

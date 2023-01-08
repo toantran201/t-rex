@@ -1,0 +1,171 @@
+@font-face {
+    font-family: 'Dinosaur Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Dinosaur Regular'), url('Dinosaur.woff') format('woff');
+}
+
+.background {
+    z-index: 1;
+    position: absolute;
+    background-image: url("https://i0.wp.com/picjumbo.com/wp-content/uploads/mountain-with-night-sky-full-of-stars.jpg?w=2210&quality=70");
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    margin: -8px;
+    margin-top: -10px;
+}
+.welcome {
+    z-index: 2;
+    position: relative;
+}
+
+.welcome > .dino-img {
+    flex: 1;
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+}
+
+.welcome > form {
+    flex: 1;
+}
+
+.circle {
+    margin: auto;
+    height: 300px;
+    width: 300px;
+    border-radius: 100%;
+    margin-top: 150px;
+}
+
+.planet {
+    z-index: 4;
+}
+h1.welcome-title {
+    position: absolute;
+    width: 100%;
+    top: 100px;
+    font-family: 'Dinosaur Regular';
+    line-height: 100px;
+    color: #169cd4;
+    text-align: center;
+    -moz-transform: scale(1) rotate(-5deg) translateX(0px) translateY(0px) skewX(1deg) skewY(1deg);
+    -webkit-transform: scale(1) rotate(-5deg) translateX(0px) translateY(0px) skewX(1deg) skewY(1deg);
+    -o-transform: scale(1) rotate(-5deg) translateX(0px) translateY(0px) skewX(1deg) skewY(1deg);
+    -ms-transform: scale(1) rotate(-5deg) translateX(0px) translateY(0px) skewX(1deg) skewY(1deg);
+    transform: scale(1) rotate(-5deg) translateX(0px) translateY(0px) skewX(1deg) skewY(1deg);
+    text-shadow: 1px 1px #424745, 2px 2px #424745, 3px 3px #424745, 4px 4px #424745, 5px 5px #424745, 6px 6px #424745, 7px 7px #424745, 8px 8px #424745, 9px 9px #424745, 10px 10px #424745, 11px 11px #424745, 12px 12px #424745, 13px 13px #424745, 14px 14px #424745, 15px 15px #424745, 16px 16px #424745, 17px 17px #424745, 18px 18px #424745, 19px 19px #424745, 20px 20px #424745, 21px 21px #424745, 22px 22px #424745, 23px 23px #424745, 24px 24px #424745, 25px 25px #424745, 26px 26px 6px #2a2e2c;
+    
+    font-size: 100px;
+    /* animation-name: float;
+    animation-duration: 1s;
+    animation-direction: alternate-reverse;
+    animation-iteration-count: infinite;
+    position: absolute;
+    animation-timing-function: cubic-bezier(0.39, 0.575, 0.565, 1); */
+}
+
+h1.welcome-title > div:nth-child(2) {
+    line-height: 100px;
+    color: #ffc704;
+}
+
+.butn {
+    background: #4ecca3;
+    font-family: "Indie Flower", cursive;
+    border-radius: 7px;
+    color: #ffff;
+    font-size: 30px;
+    padding: 14px 25px 18px 25px;
+    text-decoration: none;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.butn:hover {
+    background: #232931;
+    text-decoration: none;
+}
+
+.welcome input {
+    height: 72px;
+    font-size: 30px;
+    border-radius: 7px;
+    margin-top: -2px;
+    padding-left: 10px;
+    outline: none;
+}
+
+.welcome form {
+    position: absolute;
+    top: 450px;
+    width: 100%;
+    text-align: center;
+}
+
+.planet {
+    position: absolute;
+}
+
+.planet img {
+    z-index: 1;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    overflow: hidden;
+    border-radius: 100%;
+    background: #fd7e08;
+    left: 1000px / 2 - 50px / 2;
+    
+    animation: sun-movement 4s cubic-bezier(0.4, 0, 0.49, 1) infinite;
+}
+
+.planet :nth-child(1) {
+    position: absolute;
+}
+
+.planet :nth-child(2) {
+    position: absolute;
+    
+}
+
+.planet :nth-child(3) {
+    position: absolute;
+    
+}
+
+.planet :nth-child(4) {
+    position: absolute;
+    
+}
+
+@keyframes float {
+    from {
+        font-size: 100px;
+    }
+    to {
+        font-size: 120px;
+    }
+}
+
+@keyframes sun-movement {
+    0% {
+      transform: rotate(-80deg);
+    }
+    30% {
+      transform: rotate(-20deg);
+    }
+    100% {
+      transform: rotate(70deg);
+    }
+}
+
+#voice-control {
+    position: relative;
+    z-index: 4;
+    filter: invert(100%);
+    cursor: pointer;
+}
