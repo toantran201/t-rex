@@ -4,6 +4,7 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../styles/index.css">
     <script type="importmap">
 
     </script>
@@ -2100,13 +2101,22 @@
 </head>
 
 <body id="t">
-<div id="home">
+  <div class="background"></div>
+  <div id="home" style="z-index: 3; position: relative;">
+    <h1 class="welcome-title">
+        <div>Dino</div>
+        <div>Jupiter</div>
+    </h1>
     <h2 id="username"></h2>
+    <div id="invite-block" style="display: none">
+        <input id="copy-field" type="text" readonly>
+        <button onclick="onCopy(event)"><i class="fa fa-copy"></i></button>
+    </div>
     <div id="play-button-block">
         <button id="find-match-button" onclick="findMatch(event)">
             Find a match
         </button>
-        <button id="invite-button">
+        <button id="invite-button" onclick="onInviteClick(event)">
             Invite a friend
         </button>
     </div>
@@ -2291,7 +2301,7 @@
       var connection = 1;
       var connectionId = 1;
       const connectionTest = new signalR.HubConnectionBuilder()
-        .withUrl("https://hackathon-2023-jupiter.creativeforce-dev.io/game", {
+        .withUrl("https://hackathon-2023-jupiter.creativeforce-dev.io/jupiter", {
           withCredentials: false,
         })
         .build();
@@ -2364,6 +2374,36 @@
           alert('No connection to server yet.');
         }
       }
+
+      // Invite
+      function onInviteClick(event) {
+        if (connectionTest) {
+          try {
+            connectionTest.send('GenerateInvitationToken', {name: username});
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          alert('No connection to server yet.');
+        }
+      }
+
+      connectionTest.on('OnGeneratedInvitationToken', ({token}) => {
+        const copyUrl = `${window.location.origin}${window.location.pathname}?token=${token}`
+        const inviteBlock = document.getElementById('invite-block')
+        inviteBlock.style.display = 'block'
+
+        const copyField = document.getElementById('copy-field')
+        copyField.value = copyUrl
+      })
+
+      function onCopy(event) {
+        const copyTextField = document.getElementById("copy-field");
+        copyTextField.select();
+        copyTextField.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyTextField.value);
+      }
+
     </script>
 </div>
 </body>
