@@ -6,7 +6,7 @@
 }
 
 .background {
-    z-index: 1;
+    z-index: 0;
     position: absolute;
     background-image: url("https://i0.wp.com/picjumbo.com/wp-content/uploads/mountain-with-night-sky-full-of-stars.jpg?w=2210&quality=70");
     background-size: cover;

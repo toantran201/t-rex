@@ -2107,22 +2107,24 @@
 <body id="t">
   <div id="home">
     <div class="background"></div>
-    <h1 class="welcome-title">
+    <div style="z-index: 3; position: relative">
+      <h1 class="welcome-title">
         <div>Dino</div>
         <div>Jupiter</div>
-    </h1>
-    <h2 id="username"></h2>
-    <div id="invite-block" style="display: none">
-      <input id="copy-field" type="text" readonly />
-      <button onclick="onCopy(event)"><i class="fa fa-copy"></i></button>
-    </div>
-    <div id="play-button-block">
-      <button id="find-match-button" onclick="findMatch(event)">Find a match</button>
-      <button id="invite-button" onclick="onInviteClick(event)">Invite a friend</button>
-    </div>
-    <div id="find-match-loading" style="display: none">
-      <p><i class="fa fa-spinner fa-spin"></i> Waiting for other opponents</p>
-      <button id="cancel-match-button" onclick="cancelFindMatch(event)">Cancel</button>
+      </h1>
+      <h2 id="username"></h2>
+      <div id="invite-block" style="display: none">
+        <input id="copy-field" type="text" readonly />
+        <button onclick="onCopy(event)"><i class="fa fa-copy"></i></button>
+      </div>
+      <div id="play-button-block">
+        <button id="find-match-button" onclick="findMatch(event)">Find a match</button>
+        <button id="invite-button" onclick="onInviteClick(event)">Invite a friend</button>
+      </div>
+      <div id="find-match-loading" style="display: none">
+        <p><i class="fa fa-spinner fa-spin"></i> Waiting for other opponents</p>
+        <button id="cancel-match-button" onclick="cancelFindMatch(event)">Cancel</button>
+      </div>
     </div>
   </div>
   <div id="main-frame-error" class="interstitial-wrapper" jstcache="0" style="visibility: hidden">
