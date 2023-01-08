@@ -1,14 +1,11 @@
 <!-- Source code from http://apps.thecodepost.org/trex/trex.html -->
 
 <head>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <script type="importmap"></script>
-  <script>
-    function hideClass(name) {
-      for (var elem of $(name)) elem.style.display = "none";
-    }
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../styles/index.css">
+    <script type="importmap">
 
     var DEFAULT_WIDTH = 600,
       FPS = 60;
@@ -2108,7 +2105,12 @@
 </head>
 
 <body id="t">
-  <div id="home">
+  <div class="background"></div>
+  <div id="home" style="z-index: 3; position: relative;">
+    <h1 class="welcome-title">
+        <div>Dino</div>
+        <div>Jupiter</div>
+    </h1>
     <h2 id="username"></h2>
     <div id="invite-block" style="display: none">
       <input id="copy-field" type="text" readonly />
