@@ -3,6 +3,7 @@
 <head>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="importmap">
 
     </script>
@@ -35,17 +36,8 @@
       $(id).hide();
     }
 
-    function apiGameOver(point, thiz) {
-      console.log('game over', point);
-      showGameOverPopup('#over')
-      setTimeout(() => {
-        isWaitingResult = false;
-        // thiz.restart();
-        hideGameOverPopup('#over')
-      }, 3000)
-    }
-
     var isWaitingResult = false;
+    var thisGame = null;
 
       function Runner(outerContainerId) {
         Runner.instance_ = this;
@@ -497,7 +489,7 @@
           // Reset the time clock.
           this.time = getTimeStamp();
           isWaitingResult  = true;
-          apiGameOver(Math.ceil(this.distanceRan), this);
+          handleGameOver(Math.ceil(this.distanceRan), this);
         },
         stop: function () {
           this.activated = false;
@@ -2112,22 +2104,43 @@
     <div class="onlyforchrome" style="font-size: 30px; text-align: center; font-family: Helvetica">
         Team Jupiter - Creative Force Viet Nam
     </div>
-    <div style="font-family: Helvetica;
-      font-size: 13px;
-      font-weight: bold;
-      line-height: 1.5;
-      float: left;
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-around;
-      width: 600px;
+    <div style="
+    font-family: Helvetica;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1.5;
+    display: flex;
+    justify-content: space-around;
+    float:left;
+    width: fit-content;
       ">
-      <div id="user-score">
-        <h3>Gamer</h3>
-      </div>
-      <div id="user-other-score">
-        <h3>User</h3>
-      </div>
+        <table class="table-score">
+            <thead>
+            <tr>
+                <th  class="user-name">
+                   User
+                </th>
+                <th>
+                    Game
+                </th>
+                <th>
+                    Set
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="user-score" >
+                <td class="user-name"></td>
+                <td class="game-score">0</td>
+                <td class="set-score">0</td>
+            </tr>
+            <tr id="opponent-score">
+                <td class="user-name"></td>
+                <td class="game-score">0</td>
+                <td class="set-score">0</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     <div style="width: 200px;
       position: absolute;
@@ -2135,7 +2148,7 @@
       top: 150px;
       display: none;
     " id="gameover-popup">
-      <div id="over" style="display: none">End game / set / match</div>
+      <div id="over" style="display: none">Waiting...</div>
       <div id="waiting" style="display: none">Chờ kết quả / Kết quả</div>
       <div id="over" style="display: none">Chờ trận bắt đầu</div>
     </div>
@@ -2274,6 +2287,7 @@
 
       // username process
       const username = getParameterByName('username')
+      var userId = '';
       const userNameTag = document.getElementById('username')
       userNameTag.innerText = `Hi ${username}`
 
@@ -2281,7 +2295,7 @@
       var connection = 1;
       var connectionId = 1;
       const connectionTest = new signalR.HubConnectionBuilder()
-        .withUrl("http://0.tcp.ap.ngrok.io:11362/game", {
+        .withUrl("https://hackathon-2023-jupiter.creativeforce-dev.io/jupiter", {
           withCredentials: false,
         })
         .build();
@@ -2289,7 +2303,8 @@
       async function start() {
         try {
           await connectionTest.start();
-          console.log("SignalR Connected.");
+          connectionId = connectionTest.connectionId;
+          userId = connectionId;
         } catch (err) {
           console.log(err);
           setTimeout(start, 5000);
@@ -2311,10 +2326,49 @@
         gameBlock.style.visibility = 'visible'
 
         matchInfo = payload
+        const { users } = matchInfo;
+        const user = users.find(item => item.userId === userId);
+        const opponentUser = users.find(item => item.userId !== userId);
+        $('#user-score .user-name').html(user?.name);
+        $('#opponent-score .user-name').html(opponentUser?.name);
       })
 
+      connectionTest.on('OnGameResult', (payload) => {
+        const { isMatchEnd, usersInGame } = payload;
+        if(!isMatchEnd){
+          const user = usersInGame.find(item => item.userId === userId);
+          const opponentUser = usersInGame.find(item => item.userId !== userId);
+          $('#user-score .set-score').html(user?.setWin);
+          $('#user-score .game-score').html(user?.currentGameWin);
+          $('#opponent-score .set-score').html(opponentUser?.setWin);
+          $('#opponent-score .game-score').html(opponentUser?.currentGameWin);
+          hideGameOverPopup('#over');
+          isWaitingResult = false;
+          setTimeout(() => {
+            thisGame.restart();
+          }, 2000);
+        } else {
+          console.log('payload else', payload);
+          // alert
+        }
+      })
+      
+      // connectionTest.on('OnOpponentEndGame', (payload) => {
+      //   const { isMatchEnd, usersInGame } = payload;
+      //   if(!isMatchEnd){
+      //     const user = usersInGame.find(item => item.userId === userId);
+      //     const opponentUser = usersInGame.find(item => item.userId !== userId);
+      //     $('#user-score .set-score').html(user?.setWin);
+      //     $('#user-score .game-score').html(user?.currentGameWin);
+      //     $('#opponent-score .set-score').html(opponentUser?.setWin);
+      //     $('#opponent-score .game-score').html(opponentUser?.currentGameWin);
+      //     thisGame.restart();
+      //   } else {
+
+      //   }
+      // })
+
       function findMatch() {
-        console.log('connectionTest', connectionTest);
         if (connectionTest) {
           try {
             connectionTest.send('OnFindingMatchAsync', {
@@ -2326,6 +2380,28 @@
         } else {
           alert('No connection to server yet.');
         }
+      }
+      function postGameOver(point) {
+        const { matchId } = matchInfo;
+        console.log('matchInfo', matchInfo);
+        try {
+          connectionTest.send('OnEndGameAsync', {
+            matchId,
+            score: point
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      function handleGameOver(point, thiz) {
+        showGameOverPopup('#over')
+        postGameOver(point);
+        isWaitingResult = true;
+        thisGame = thiz
+        // setTimeout(() => {
+        //   thiz.restart();
+        //   hideGameOverPopup('#over')
+        // }, 3000)
       }
     </script>
 </div>
