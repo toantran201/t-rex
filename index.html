@@ -58,7 +58,19 @@
 
     function apiGameOver(point, thiz) {
       console.log('game over', point);
-      showGameOverPopup('#over')
+      // fetch(`${API_END_POINT}/OnEndGameAsync`,{
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     matchId: '73ef5f29-b504-4751-bcc9-a8fec0566c57',
+      //     score: 10
+      //   })
+      // })
+      //   .then((response) => response.json())
+      showGameOverPopup('#over');
+
       setTimeout(() => {
         isWaitingResult = false;
         // thiz.restart();
@@ -466,7 +478,6 @@
         }
       },
       onKeyUp: function (e) {
-        debugger
         var keyCode = String(e.keyCode);
         var isjumpKey =
           Runner.keycodes.JUMP[keyCode] || e.type == Runner.events.TOUCHEND || e.type == Runner.events.MOUSEDOWN;
