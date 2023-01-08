@@ -6,20 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <meta name="description" content="">
-
+    <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div id="app">
-    <h1>Welcome</h1>
+    <div class="background"></div>
+<div class="planet">
+    <img src="../images/planet1.png" height="50" width="50" />
+    <img src="../images/planet2.webp" height="50" width="50" />
+    <img src="../images/planet3.png" height="50" width="50" />
+    <img src="../images/planet4.png" height="50" width="50" />
+</div>
+<div class="welcome">
+    <h1 class="welcome-title">
+        <div>Dino</div>
+        <div>Jupiter</div>
+    </h1>
+    <!-- <img class="dino-img" src="https://art.pixilart.com/e00cff2d5f78554.png" alt="dinosaur" /> -->
     <form onsubmit="welcomeSubmit(event)">
-        <label>
-            <input type="text" name="username" placeholder="Username" required/>
-        </label>
-        <button type="submit">
+        <input type="text" name="username" placeholder="Username" required/>
+        <button type="submit" class="butn">
             <i id="welcome-loading" class="fa fa-spinner fa-spin" style="display: none"></i> New game
         </button>
     </form>
+    <audio loop="true" autoplay="true">
+        <source src="../sounds/dino-sound.mp3" />
+    </audio>
+</div>
 </div>
 <script>
   const welcomeSubmit = (event) => {
