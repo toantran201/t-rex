@@ -1,6 +1,7 @@
 <!-- Source code from http://apps.thecodepost.org/trex/trex.html -->
 
 <head>
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -2093,12 +2094,17 @@
 <body id="t">
 <div id="home">
     <h2 id="username"></h2>
-    <button onclick="findMatch(event)">
-        <i id="find-match-loading" class="fa fa-spinner fa-spin" style="display: none"></i> Find a match
-    </button>
-    <button>
-        Invite a friend
-    </button>
+    <div id="invite-block" style="display: none">
+        <input id="copy-field" type="text" readonly />
+        <button onclick="onCopy(event)"></button>
+    </div>
+    <div id="play-button-block">
+        <button id="find-match-button" onclick="findMatch(event)">Find a match</button>
+    </div>
+    <div id="find-match-loading" style="display: none">
+        <p>Waiting for other opponents.....</p>
+        <button id="cancel-match-button" onclick="cancelFindMatch(event)">Cancel</button>
+    </div>
 </div>
 <div id="main-frame-error" class="interstitial-wrapper" jstcache="0" style="visibility: hidden;">
     <div class="onlyforchrome" style="font-size: 30px; text-align: center; font-family: Helvetica">
@@ -2373,17 +2379,56 @@
       //   }
       // })
 
-      function findMatch() {
+      function findMatch(event) {
+        // Hide find match
+        const playButtonBlock = document.getElementById("play-button-block");
+        playButtonBlock.style.display = "none";
+        // show cancel
+        const findMatchBlock = document.getElementById("find-match-loading");
+        findMatchBlock.style.display = "block";
+
+        event.target.disabled = true;
         if (connectionTest) {
           try {
-            connectionTest.send('OnFindingMatchAsync', {
-              name: username
+            connectionTest.send("OnFindingMatchAsync", {
+              name: username,
             });
           } catch (e) {
             console.log(e);
           }
         } else {
-          alert('No connection to server yet.');
+          alert("No connection to server yet.");
+        }
+      }
+
+      // Invite
+      function onInviteClick(event) {
+        if (connectionTest) {
+          try {
+            connectionTest.send("GenerateInvitationToken", { name: username });
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          alert("No connection to server yet.");
+        }
+      }
+
+      function cancelFindMatch(event) {
+        if (connectionTest) {
+          try {
+            connectionTest.send("OnStopFindingMatchAsync", {});
+            // Hide find match
+            const playButtonBlock = document.getElementById("play-button-block");
+            playButtonBlock.style.display = "block";
+            // show cancel
+            const findMatchBlock = document.getElementById("find-match-loading");
+            findMatchBlock.style.display = "none";
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          alert("No connection to server yet.");
         }
       }
       function postGameOver(point) {
