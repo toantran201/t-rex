@@ -2332,7 +2332,9 @@
         $('#user-score .user-name').html(user?.name);
         $('#opponent-score .user-name').html(opponentUser?.name);
       })
-
+      function reload(){
+      window.location.href=window.location.href;
+      }
       connectionTest.on('OnGameResult', (payload) => {
         const { isMatchEnd, usersInGame } = payload;
         if(!isMatchEnd){
@@ -2348,8 +2350,11 @@
             thisGame.restart();
           }, 2000);
         } else {
-          console.log('payload else', payload);
-          // alert
+          if (payload?.winPlayerUserId === userId) {
+            alert('You win', reload());
+          } else {
+            alert('You lose', reload());
+          }
         }
       })
       
