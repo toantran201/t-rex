@@ -2267,8 +2267,15 @@
       // Start the connection.
       start();
 
-      connectionTest.on('OnReadyGameAsync', (a) => {
-        console.log('a')
+      let matchInfo = {}
+      connectionTest.on('OnCreatedMatch', (payload) => {
+        const homeBlock = document.getElementById('home')
+        const gameBlock = document.getElementById('main-frame-error')
+
+        homeBlock.style.display = 'none'
+        gameBlock.style.visibility = 'visible'
+
+        matchInfo = payload
       })
 
       function findMatch() {
